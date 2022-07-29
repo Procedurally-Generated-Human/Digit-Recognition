@@ -1,10 +1,13 @@
 from tkinter import *
 from tkinter.colorchooser import askcolor
 
+import torch
+
 from PIL import Image
 import os
 
 from converter import Converter
+from neuralNetwork import NeuralNetwork
 
 
 
@@ -24,7 +27,7 @@ class Paint(object):
     def setup(self):
         self.old_x = None
         self.old_y = None
-        self.line_width = 75
+        self.line_width = 50
         self.c.bind('<B1-Motion>', self.paint)
         self.c.bind('<ButtonRelease-1>', self.reset)
 
@@ -36,7 +39,14 @@ class Paint(object):
         img.save(fileName + '.png', 'png') 
         self.c.delete("all")
         c = Converter(img)
-        c.complete_convert()
+        converted_image = c.complete_convert()
+        neural_network = NeuralNetwork()
+        neural_network.load_state_dict(torch.load("model.pth"))
+        tensor = torch.from_numpy(converted_image)
+        guess = neural_network(tensor)
+        print(guess)
+        print(guess.argmax(1))
+
 
 
     def paint(self, event):

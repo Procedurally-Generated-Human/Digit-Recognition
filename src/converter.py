@@ -76,24 +76,6 @@ class Converter():
                 self.resized_image_array[r][c] = self.resized_image_array[r][c]/255
         self.resized_image_array = self.resized_image_array[numpy.newaxis, :, :]
         self.resized_image_array = self.resized_image_array.astype(numpy.float32)
-        import torch
-        from torch import nn
-        from torch.utils.data import DataLoader
-        from torchvision import datasets
-        from torchvision.transforms import ToTensor
-
-        from main import NeuralNetwork
-        from main import load_data, draw_data
-
-
-
-        model = NeuralNetwork()
-        model.load_state_dict(torch.load("model.pth"))
-
-
-        tensor = torch.from_numpy(resized_image_array)
-        a = model(tensor)
-        print(a.argmax(1))
 
 
 
@@ -105,5 +87,6 @@ class Converter():
     def complete_convert(self):
         self.delete_extra_pixels()
         self.squeeze()
-        self.draw()
+        #self.draw()
         self.finalize()
+        return self.resized_image_array
