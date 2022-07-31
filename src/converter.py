@@ -31,7 +31,7 @@ class Converter():
 
     def delete_extra_pixels(self):
 
-        for row in range(8):
+        for row in range(6):
             self.image_array = numpy.delete(self.image_array, row, 0)
 
         self.image_array = numpy.delete(self.image_array,0,1)
@@ -40,8 +40,6 @@ class Converter():
         self.image_array = numpy.delete(self.image_array,0,1)
         self.image_array = numpy.delete(self.image_array,0,1)
         self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
-        
 
     def squeeze(self):
 

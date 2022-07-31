@@ -4,6 +4,7 @@ from tkinter.colorchooser import askcolor
 import torch
 
 from PIL import Image
+from PIL import ImageGrab
 import os
 
 from converter import Converter
@@ -27,17 +28,25 @@ class Paint(object):
     def setup(self):
         self.old_x = None
         self.old_y = None
-        self.line_width = 50
+        self.line_width = 100
         self.c.bind('<B1-Motion>', self.paint)
         self.c.bind('<ButtonRelease-1>', self.reset)
 
+
+    def save_widget_as_image(self, widget, file_name):
+        ImageGrab.grab(bbox=(
+        widget.winfo_rootx(),
+        widget.winfo_rooty(),
+        widget.winfo_rootx() + widget.winfo_width(),
+        widget.winfo_rooty() + widget.winfo_height()
+        )).save(file_name+".png")
+
     def set_image(self):
         fileName = "number"
-        self.c.postscript(file = fileName + '.eps') 
-        img = Image.open(fileName + '.eps')
-        os.remove("number.eps")
-        img.save(fileName + '.png', 'png') 
+        self.save_widget_as_image(self.c, "hi")
         self.c.delete("all")
+        img = Image.open('hi.png')
+        print(img.size)
         c = Converter(img)
         converted_image = c.complete_convert()
         neural_network = NeuralNetwork()
