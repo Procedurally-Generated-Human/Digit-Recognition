@@ -1,5 +1,7 @@
 from PIL import Image
 import numpy
+import matplotlib.pyplot as plt
+
 
 
 class Converter():
@@ -31,15 +33,16 @@ class Converter():
 
     def delete_extra_pixels(self):
 
-        for row in range(6):
-            self.image_array = numpy.delete(self.image_array, row, 0)
 
-        self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
-        self.image_array = numpy.delete(self.image_array,0,1)
+        row_number = 0
+        while self.image_array.shape[0] != 784:
+            self.image_array = numpy.delete(self.image_array, row_number, 0)
+            row_number += 1
+
+        while self.image_array.shape[1] != 784:
+            self.image_array = numpy.delete(self.image_array,0,1)
+
+
 
     def squeeze(self):
 
@@ -78,8 +81,12 @@ class Converter():
 
 
     def draw(self):
-        image = Image.fromarray(self.resized_image_array)
-        image.show()
+        img = Image.fromarray(self.resized_image_array)
+        figure = plt.figure(figsize =(4,4))
+        plt.title("image")
+        plt.axis("off")
+        plt.imshow(img, cmap="gray")
+        plt.show()
 
 
     def complete_convert(self):

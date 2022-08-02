@@ -20,8 +20,12 @@ class Paint(object):
         self.root = Tk()
         self.c = Canvas(self.root, bg='white', width=28*28, height=28*28)
         self.c.grid(row=1, columnspan=5)
-        self.choose_size_button = Button(self.root, text="Done", command=self.set_image)
-        self.choose_size_button.grid(row=0, column=4)
+        self.finish_button = Button(self.root, text="Done", command=self.set_image)
+        self.finish_button.grid(row=0, column=3)
+        self.guess_label = Label(self.root, text="Number: -")
+        self.guess_label.config(font =("Helvetica", 15))
+        self.guess_label.grid(row=0, column=4)
+
         self.setup()
         self.root.mainloop()
 
@@ -43,10 +47,9 @@ class Paint(object):
 
     def set_image(self):
         fileName = "number"
-        self.save_widget_as_image(self.c, "hi")
+        self.save_widget_as_image(self.c, "number")
         self.c.delete("all")
-        img = Image.open('hi.png')
-        print(img.size)
+        img = Image.open('number.png')
         c = Converter(img)
         converted_image = c.complete_convert()
         neural_network = NeuralNetwork()
@@ -54,7 +57,10 @@ class Paint(object):
         tensor = torch.from_numpy(converted_image)
         guess = neural_network(tensor)
         print(guess)
-        print(guess.argmax(1))
+        guess = guess.argmax(1)
+        self.guess_label.config(text = "Number:"+str(guess.item()))
+
+
 
 
 
@@ -68,6 +74,3 @@ class Paint(object):
 
     def reset(self, event):
         self.old_x, self.old_y = None, None
-
-
-
